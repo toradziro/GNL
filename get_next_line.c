@@ -5,102 +5,54 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehillman <ehillman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/07 16:23:10 by ehillman          #+#    #+#             */
-/*   Updated: 2020/11/07 21:29:11 by ehillman         ###   ########.fr       */
+/*   Created: 2020/11/08 10:11:42 by ehillman          #+#    #+#             */
+/*   Updated: 2020/11/08 12:30:56 by ehillman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include <unistd.h>
+#include <stdlib.h>
 
-static int		ft_find_endl(char *tmp);
+char	*ft_read_to_endl(char *tmp, int BUFFER_SIZE, int fd);
 
-static void		ft_read(char *buff, char *tmp, int fd, int BUFFER_SIZE);
-
-static char		*ft_fill(char *tmp, char **line);
-
-static char 	*ft_fill_eof(char *tmp, char **line);
+int		ft_find_endl(char *tmp);
 
 int		get_next_line(int fd, char **line)
 {
-	int				BUFFER_SIZE = 10;
-	static char		*tmp;
-	char			*buff;
+	int		BUFFER_SIZE;
+	static char	*tmp;
 
-	buff = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	while (ft_find_endl(tmp) == 0)
-		ft_read(buff, tmp, fd, BUFFER_SIZE);
-	if ((ft_find_endl(tmp)) == 1)
+	BUFFER_SIZE = 10;
+	tmp = ft_read_to_endl(tmp, BUFFER_SIZE, fd);
+	*line = tmp;
+	return (1);
+}
+
+char	*ft_read_to_endl(char *tmp, int BUFFER_SIZE, int fd)
+{
+	char	*buff;
+
+	if (!(buff = (char*)malloc(sizeof(char) * BUFFER_SIZE + 1)))
+		return (NULL);
+	while (!(ft_find_endl(tmp)))
 	{
-		*line = ft_fill(tmp, line);
-		return (1);
+		read(fd, buff, BUFFER_SIZE);
+		buff[BUFFER_SIZE] = '\0';
+		tmp = ft_reput(tmp, buff);
 	}
-	else if ((ft_find_endl(tmp)) == 2)
-	{
-		*line = ft_fill_eof(tmp, line);
+	return (tmp);
+}
+
+int		ft_find_endl(char *tmp)
+{
+	int		i;
+
+	i = 0;
+	if (ft_strlen(tmp) == 0)
 		return (0);
-	}
-	return (0);
-}
-
-static char *ft_fill_eof(char *tmp, char **line)
-{
-	int		i;
-	char	*new;
-
-	i = 0;
-	while (tmp[i] != '\0')
-		i++;
-	new = (char*)malloc(sizeof(char) * i + 1);
-	i = 0;
 	while (tmp[i] != '\0')
 	{
-		new[i] = tmp[i];
-		i++;
-	}
-	new[i] = '\0';
-	free(tmp);
-	return (new);
-}
-
-static char	*ft_fill(char *tmp, char **line)
-{
-	int		i;
-	char	*new;
-
-	i = 0;
-	while (tmp[i] != '\n')
-		i++;
-	new = (char*)malloc(sizeof(char) * i + 1);
-	i = 0;
-	while (tmp[i] != '\n')
-	{
-		new[i] = tmp[i];
-		i++;
-	}
-	new[i] = '\0';
-	tmp = ft_substr(tmp, i, (ft_strlen(tmp) - i));
-	return (new);
-}
-
-static void	ft_read(char *buff, char *tmp, int fd, int BUFFER_SIZE)
-{
-	read(fd, buff, BUFFER_SIZE);
-	buff[BUFFER_SIZE] = '\0';
-	tmp = ft_strjoin(tmp, buff);
-}
-
-static int		ft_find_endl(char *tmp)
-{
-	int		i;
-
-	i = 0;
-	if (!tmp)
-		return (0);
-	while (tmp[i])
-	{
-		if (tmp[i] == '\0')
-			return (2);
-		else if (tmp[i] == '\n')
+		if (tmp[i] == '\n')
 			return (1);
 		i++;
 	}
