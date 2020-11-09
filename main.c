@@ -9,7 +9,7 @@ int main(void)
 {
 	int 	fd;
 	char	*str;
-	fd = open("test", O_RDONLY);
+	fd = open("test", O_RDWR);
 	get_next_line(fd, &str);
 		printf("%s", str);
 }

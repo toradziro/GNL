@@ -10,35 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
-
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-
-char	*ft_strdup(const char *str);
-
-char	*ft_reput(char *tmp, char *buff);
-
-int		ft_strlen(char *s);
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
-{
-	unsigned char	*tmp1;
-	unsigned char	*tmp2;
-	size_t			i;
-
-	tmp1 = (unsigned char*)dest;
-	tmp2 = (unsigned char*)src;
-	i = 0;
-	if (!tmp1 && !tmp2)
-		return (NULL);
-	while (i < n)
-	{
-		tmp1[i] = tmp2[i];
-		i++;
-	}
-	return (dest);
-}
+#include "get_next_line.h"
 
 char		*ft_strdup(const char *str)
 {
@@ -81,8 +53,54 @@ char	*ft_reput(char *tmp, char *buff)
 	if (l1 == 0)
 		return (ft_strdup(buff));
 	l2 = ft_strlen(buff);
-	new = (char*)malloc(sizeof(char) * (l1 + l2 + 1));
-	ft_memcpy(new, tmp, l1);
-	ft_memcpy(new + l1, buff, l2);
+	new = ft_calloc(sizeof(char), (l1 + l2 + 1));
+	ft_strlcat(new, tmp, (l1 + l2));
+	ft_strlcat(new + l1, buff, (l2 + l1));
 	return (new);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	d_len;
+	size_t	i;
+
+	d_len = 0;
+	i = 0;
+	while (dst[d_len] && d_len < size)
+		d_len++;
+	while ((d_len + i + 1 < size) && (src[i]))
+	{
+		dst[d_len + i] = src[i];
+		i++;
+	}
+	if (d_len != size)
+		dst[d_len + i] = '\0';
+	return (ft_strlen((char*)src) + d_len);
+}
+
+void	*ft_calloc(size_t num, size_t size)
+{
+	void *res;
+
+	res = (char*)malloc(num * size);
+	if (!res)
+		return (NULL);
+	ft_memset(res, 0, (num * size));
+	return (res);
+}
+
+void	*ft_memset(void *dest, int c, size_t n)
+{
+	size_t			i;
+	unsigned char	*str;
+
+	i = 0;
+	str = (unsigned char*)dest;
+	while (i < n)
+	{
+		*str = c;
+		str++;
+		i++;
+	}
+	return (dest);
 }

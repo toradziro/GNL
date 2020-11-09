@@ -10,25 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdlib.h>
+#include "get_next_line.h"
+#define BUFFER_SIZE 10
 
-char	*ft_read_to_endl(char *tmp, int BUFFER_SIZE, int fd);
+static char	*ft_read_to_endl(char *tmp, int fd);
 
-int		ft_find_endl(char *tmp);
+static int		ft_find_endl(char *tmp);
 
 int		get_next_line(int fd, char **line)
 {
-	int		BUFFER_SIZE;
 	static char	*tmp;
 
-	BUFFER_SIZE = 10;
-	tmp = ft_read_to_endl(tmp, BUFFER_SIZE, fd);
+	tmp = ft_read_to_endl(tmp, fd);
 	*line = tmp;
 	return (1);
 }
 
-char	*ft_read_to_endl(char *tmp, int BUFFER_SIZE, int fd)
+static char	*ft_read_to_endl(char *tmp, int fd)
 {
 	char	*buff;
 
@@ -43,7 +41,7 @@ char	*ft_read_to_endl(char *tmp, int BUFFER_SIZE, int fd)
 	return (tmp);
 }
 
-int		ft_find_endl(char *tmp)
+static int		ft_find_endl(char *tmp)
 {
 	int		i;
 
