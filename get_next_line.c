@@ -6,7 +6,7 @@
 /*   By: ehillman <ehillman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 10:11:42 by ehillman          #+#    #+#             */
-/*   Updated: 2020/11/13 18:29:03 by ehillman         ###   ########.fr       */
+/*   Updated: 2020/11/13 18:50:13 by ehillman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ int		get_next_line(int fd, char **line)
 	while (rd > 0 && !(ft_find_endl(rem)))
 	{
 		if ((rd = read(fd, buff, BUFFER_SIZE)) == -1)
-		{
-			free(buff);
-			return (-1);
-		}
+			return (ft_free(buff));
 		buff[rd] = '\0';
 		rem = ft_strjoin(rem, buff);
 	}
@@ -96,11 +93,7 @@ char	*ft_cut(char *rem)
 		return (NULL);
 	i = 0;
 	while (rem[count])
-	{
-		tmp[i] = rem[count];
-		i++;
-		count++;
-	}
+		tmp[i++] = rem[count++];
 	tmp[i] = '\0';
 	free(rem);
 	return (tmp);

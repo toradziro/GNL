@@ -6,22 +6,22 @@
 /*   By: ehillman <ehillman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 12:24:11 by ehillman          #+#    #+#             */
-/*   Updated: 2020/11/13 17:26:53 by ehillman         ###   ########.fr       */
+/*   Updated: 2020/11/13 18:52:26 by ehillman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char *s1, char *s2)
+char				*ft_strjoin(char *s1, char *s2)
 {
-	char	*new;
-	char	*tmp;
-	int		i;
+	char			*new;
+	char			*tmp;
+	int				i;
 
 	i = 0;
 	if (!s1 && !s2)
 		return (NULL);
-	if(!(new = ft_calloc(sizeof(char), (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	if (!(new = ft_calloc(sizeof(char), (ft_strlen(s1) + ft_strlen(s2) + 1))))
 		return (NULL);
 	tmp = new;
 	while (s1 && s1[i])
@@ -41,9 +41,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (tmp);
 }
 
-int		ft_strlen(char *s)
+int					ft_strlen(char *s)
 {
-	int		i;
+	int				i;
 
 	i = 0;
 	if (!s)
@@ -53,9 +53,9 @@ int		ft_strlen(char *s)
 	return (i);
 }
 
-void	*ft_calloc(size_t num, size_t size)
+void				*ft_calloc(size_t num, size_t size)
 {
-	void *res;
+	void			*res;
 
 	res = (char*)malloc(num * size);
 	if (!res)
@@ -78,4 +78,10 @@ void				*ft_memset(void *dest, int c, size_t n)
 		i++;
 	}
 	return (dest);
+}
+
+int					ft_free(char *tmp)
+{
+	free(tmp);
+	return (-1);
 }
