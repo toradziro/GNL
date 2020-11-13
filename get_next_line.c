@@ -6,7 +6,7 @@
 /*   By: ehillman <ehillman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/08 10:11:42 by ehillman          #+#    #+#             */
-/*   Updated: 2020/11/13 18:50:13 by ehillman         ###   ########.fr       */
+/*   Updated: 2020/11/13 20:34:36 by ehillman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@ int		get_next_line(int fd, char **line)
 	buff = (char*)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	rd = 1;
 	if (fd < 0 || !line || BUFFER_SIZE <= 0 || !buff)
-	{
-		free(buff);
-		return (-1);
-	}
+		return (ft_free(buff));
 	while (rd > 0 && !(ft_find_endl(rem)))
 	{
 		if ((rd = read(fd, buff, BUFFER_SIZE)) == -1)
 			return (ft_free(buff));
 		buff[rd] = '\0';
-		rem = ft_strjoin(rem, buff);
+		if (!(rem = ft_strjoin(rem, buff)))
+		{
+			free(rem);
+			return (ft_free(buff));
+		}
 	}
 	free(buff);
-	*line = ft_init(rem);
+	if (!(*line = ft_init(rem)))
+		return (ft_free(rem));
 	rem = ft_cut(rem);
-	if (rd == 0)
-		return (0);
-	return (1);
+	return (rd == 0 ? 0 : 1);
 }
 
 int		ft_find_endl(char *tmp)
